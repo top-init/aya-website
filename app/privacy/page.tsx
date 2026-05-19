@@ -41,7 +41,7 @@ export default function PrivacyPage() {
       <p>
         The Service is operated by Lit Apps Lab LLC, located at 30 N Gould St
         Ste R, Sheridan WY 82801, United States. For privacy questions, contact
-        us at <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a>.
+        us at <a href="mailto:info@litappslab.com">info@litappslab.com</a>.
       </p>
 
       <h2>2. Information we collect</h2>
@@ -313,7 +313,7 @@ export default function PrivacyPage() {
         You can delete your account directly inside the app under{" "}
         <em>Settings → Account → Delete account</em>, or by visiting{" "}
         <a href="/delete-account">/delete-account</a>. For other requests,
-        email <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a>{" "}
+        email <a href="mailto:info@litappslab.com">info@litappslab.com</a>{" "}
         from the address on your account and we will respond within 30 days.
       </p>
 
@@ -324,7 +324,7 @@ export default function PrivacyPage() {
         opt out of any &ldquo;sale&rdquo; or &ldquo;sharing.&rdquo; We do not
         sell personal information and we do not share it for cross-context
         behavioural advertising. To exercise your rights, email{" "}
-        <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a>.
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a>.
       </p>
 
       <h2>12. Children</h2>
@@ -354,7 +354,7 @@ export default function PrivacyPage() {
       <h2>15. Contact</h2>
       <p>
         Questions, requests or complaints? Email{" "}
-        <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a> or write
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a> or write
         to us at:
       </p>
       <p>

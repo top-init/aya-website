@@ -1,6 +1,6 @@
 const APP_STORE_URL =
   "https://apps.apple.com/us/app/aya-manifest-your-dream-self/id6760195623";
-const PLAY_STORE_URL = "https://www.fromkuskus.com/";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.litapps.aya";
 
 export function StoreBadges({ align = "start" }: { align?: "start" | "center" }) {
   return (

@@ -180,10 +180,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Terms
               </Link>
               <a
-                href="mailto:info@ltiappslab.com"
+                href="mailto:info@litappslab.com"
                 className="t-label text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] col-span-2"
               >
-                info@ltiappslab.com
+                info@litappslab.com
               </a>
             </nav>
           </div>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/support" },
 };
 
-const SUPPORT_EMAIL = "info@ltiappslab.com";
+const SUPPORT_EMAIL = "info@litappslab.com";
 
 export default function SupportPage() {
   return (

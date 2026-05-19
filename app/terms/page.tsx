@@ -58,7 +58,7 @@ export default function TermsPage() {
         You are responsible for safeguarding your sign-in credentials and for
         all activity under your account. Sign in is provided via Apple, Google
         or email magic link. Notify us immediately at{" "}
-        <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a> if you
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a> if you
         suspect unauthorized access.
       </p>
 
@@ -279,7 +279,7 @@ export default function TermsPage() {
       <h2>18. Contact</h2>
       <p>
         Questions? Email{" "}
-        <a href="mailto:info@ltiappslab.com">info@ltiappslab.com</a> or write
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a> or write
         to Lit Apps Lab LLC, 30 N Gould St Ste R, Sheridan WY 82801, USA.
       </p>
     </article>

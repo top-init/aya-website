@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/delete-account" },
 };
 
-const SUPPORT_EMAIL = "info@ltiappslab.com";
+const SUPPORT_EMAIL = "info@litappslab.com";
 
 export default function DeleteAccountPage() {
   return (
