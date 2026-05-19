@@ -1,0 +1,271 @@
+@import "tailwindcss";
+
+@theme {
+  /* Lavender (primary brand) — mirrors ui/tokens/primitive/palette.ts */
+  --color-lavender-1: #FDFDFF;
+  --color-lavender-2: #F8F8FF;
+  --color-lavender-3: #F4F0FE;
+  --color-lavender-4: #EBE4FF;
+  --color-lavender-5: #E1D9FF;
+  --color-lavender-6: #D4C1F9;
+  --color-lavender-7: #C2B5F5;
+  --color-lavender-8: #AB9EF5;
+  --color-lavender-9: #8E6B7F;
+  --color-lavender-10: #7F5F72;
+  --color-lavender-11: #755869;
+  --color-lavender-12: #3D2B34;
+
+  /* Mauve (neutral) — mirrors palette.ts */
+  --color-mauve-1: #FDFCFD;
+  --color-mauve-2: #FAF9FB;
+  --color-mauve-3: #F3F1F5;
+  --color-mauve-4: #EBE9EE;
+  --color-mauve-5: #E2DFE5;
+  --color-mauve-6: #DBD8DF;
+  --color-mauve-7: #D0CDD7;
+  --color-mauve-8: #BCBAC7;
+  --color-mauve-9: #8E8C99;
+  --color-mauve-10: #84828E;
+  --color-mauve-11: #65636D;
+  --color-mauve-12: #211F26;
+
+  /* Rose (secondary accent) — mirrors palette.ts */
+  --color-rose-3: #FCE5F3;
+  --color-rose-8: #F4A8C7;
+  --color-rose-9: #D6409F;
+
+  /* Peach (warm highlight) — mirrors palette.ts */
+  --color-peach-3: #FFE8D9;
+  --color-peach-5: #FFD1C1;
+
+  /* Coral (heart accent) — mirrors palette.ts */
+  --color-coral-3: #FFEBE7;
+  --color-coral-9: #E54D2E;
+
+  /* Semantic — mirrors ui/tokens/semantic/colors.light.ts EXACTLY */
+  --color-canvas: #F8F8FF;                    /* lavender.l2 — NOT pure white */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #FAF9FB;            /* mauve.m2 */
+  --color-text-primary: #211F26;              /* mauve.m12 */
+  --color-text-secondary: #65636D;            /* mauve.m11 */
+  --color-text-tertiary: #84828E;             /* mauve.m10 */
+  --color-text-on-brand: #ffffff;
+  --color-border-subtle: rgba(33, 31, 38, 0.06);
+  --color-border-default: rgba(33, 31, 38, 0.10);
+  --color-brand: #8E6B7F;                     /* lavender.l9 — dusty mauve */
+  --color-brand-hover: #7F5F72;               /* lavender.l10 */
+  --color-brand-subtle: rgba(142, 107, 127, 0.12);
+  --color-hero-accent: #3D2B34;               /* lavender.l12 — deep dusk */
+  --color-heart: #E54D2E;                     /* coral.c9 */
+
+  /* Fonts — wired by next/font in layout.tsx */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, "Times New Roman", serif;
+  --font-italic: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* Radii match app */
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+html, body {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+::selection {
+  background: var(--color-lavender-4);
+  color: var(--color-lavender-12);
+}
+
+/* Type roles — mirror ui/tokens/semantic/typography.ts letter-spacings */
+.t-hero {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 42px;
+  line-height: 1.18;
+  letter-spacing: -0.8px;
+}
+@media (min-width: 640px) {
+  .t-hero { font-size: 56px; line-height: 1.1; letter-spacing: -1.6px; }
+}
+@media (min-width: 1024px) {
+  .t-hero { font-size: 68px; letter-spacing: -2px; }
+}
+
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.22;
+  letter-spacing: -0.5px;
+}
+@media (min-width: 640px) {
+  .t-display { font-size: 42px; letter-spacing: -0.8px; }
+}
+
+.t-title1 {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.28;
+  letter-spacing: -0.4px;
+}
+
+.t-title2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.33;
+  letter-spacing: -0.3px;
+}
+
+.t-title3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+}
+
+.t-subtitle {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.44;
+  letter-spacing: -0.1px;
+}
+
+.t-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.t-body-lg {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+.t-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0.2px;
+}
+
+.t-caption {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.33;
+  letter-spacing: 0.2px;
+}
+
+.t-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+/* Editorial italic — Playfair Display, reserved for one editorial accent per surface
+   (mirrors app's editorial-accent rule — one word, not a whole headline) */
+.t-serif-italic {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-optical-sizing: auto;
+}
+
+/* Sunrise gradient — drives hero background, mirrors app's sunriseLavender recipe */
+.bg-sunrise {
+  background:
+    linear-gradient(135deg, var(--color-lavender-3) 0%, var(--color-rose-3) 55%, var(--color-peach-3) 100%);
+}
+
+/* Calm dusk — drives CTA section, mirrors app's calmNight gradient */
+.bg-dusk {
+  background:
+    linear-gradient(180deg, #1C1536 0%, #3A1F47 60%, #5D2748 100%);
+}
+
+/* Legal prose */
+.prose-legal h2 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.prose-legal h3 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.prose-legal p,
+.prose-legal li {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0;
+  color: var(--color-text-secondary);
+}
+
+.prose-legal p {
+  margin-bottom: 1rem;
+}
+
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.prose-legal ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.prose-legal li {
+  margin-bottom: 0.375rem;
+}
+
+.prose-legal strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.prose-legal a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
+
+.prose-legal a:hover {
+  color: var(--color-brand-hover);
+}
