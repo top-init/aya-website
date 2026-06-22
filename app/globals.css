@@ -204,6 +204,73 @@ html, body {
     linear-gradient(180deg, #1C1536 0%, #3A1F47 60%, #5D2748 100%);
 }
 
+/* ── Share player: app-faithful orb, arcs, grain ──────────────────── */
+
+/* Glow behind the WebGL orb canvas — mirrors the app's shadow('glow') */
+.aya-orb-glow {
+  filter: drop-shadow(0 0 22px rgba(171, 158, 245, 0.55))
+    drop-shadow(0 14px 40px rgba(142, 107, 127, 0.4));
+}
+@keyframes aya-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+.aya-breathe { animation: aya-breathe 4.4s ease-in-out infinite; }
+
+/* glow halo behind the orb */
+.aya-halo {
+  background: radial-gradient(circle, rgba(171, 158, 245, 0.5) 0%, rgba(171, 158, 245, 0) 70%);
+  filter: blur(8px);
+}
+
+/* affirmation caption cross-fade */
+@keyframes aya-line-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.aya-line { animation: aya-line-in 0.6s ease-out; }
+
+/* voice-ring drag readout — fades in within the dial's bottom gap */
+@keyframes aya-ring-readout-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.aya-ring-readout { animation: aya-ring-readout-in 0.16s ease-out; }
+
+/* film grain — mirrors the app's 0.08 grain overlay */
+.aya-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.08;
+}
+
+/* Range slider — used by the share player (seek + voice balance) */
+.aya-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-lavender-4);
+  cursor: pointer;
+}
+.aya-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-brand);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(61, 43, 52, 0.35);
+}
+.aya-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-brand);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(61, 43, 52, 0.35);
+}
+
 /* Legal prose */
 .prose-legal h2 {
   font-family: var(--font-serif);
