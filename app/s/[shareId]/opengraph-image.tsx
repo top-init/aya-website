@@ -27,7 +27,12 @@ export default async function Image({ params }: Params) {
   try {
     const { shareId } = await params;
     const share = await getShare(shareId);
-    const noun = share.type === "subliminal" ? "subliminal" : "visualization";
+    const noun =
+      share.type === "subliminal"
+        ? "subliminal"
+        : share.type === "sleep"
+          ? "sleep journey"
+          : "visualization";
 
     const [semibold, medium, italic] = await Promise.all([
       loadFont("Cormorant-SemiBold.ttf"),

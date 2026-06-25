@@ -7,7 +7,7 @@ export type TimedLine = { index: number; text: string; start: number; end: numbe
 
 export type ShareData = {
   shareId: string;
-  type: "moment" | "subliminal";
+  type: "moment" | "subliminal" | "sleep";
   creatorName: string;
   title: string;
   theme?: string;
@@ -35,21 +35,23 @@ export const SHARE_API_BASE =
   process.env.SHARE_API_BASE || "http://127.0.0.1:8080";
 
 function mapApiToShare(api: Record<string, unknown>): ShareData {
-  const type = api.type as "moment" | "subliminal";
-  if (type === "subliminal") {
+  const type = api.type as "moment" | "subliminal" | "sleep";
+  // Subliminal + sleep share the same voice-over-bed shape; sleep just plays
+  // the voice ONCE whole-track (loopSeconds 0) instead of loop-cycling a window.
+  if (type === "subliminal" || type === "sleep") {
     const timed = ((api.lines as TimedLine[]) || [])
       .slice()
       .sort((a, b) => a.index - b.index);
     return {
       shareId: String(api.share_id),
-      type: "subliminal",
+      type,
       creatorName: (api.creator_name as string) || "Someone",
-      title: (api.name as string) || "A subliminal",
+      title: (api.name as string) || (type === "sleep" ? "A sleep journey" : "A subliminal"),
       theme: api.theme as string | undefined,
       voiceUrl: api.audio_url as string | undefined,
       bedUrl: api.bed_url as string | undefined,
       bedName: (api.bed_name as string) || "Ambient",
-      loopSeconds: (api.loop_seconds as number) || 30,
+      loopSeconds: type === "sleep" ? 0 : (api.loop_seconds as number) || 30,
       lines: timed.map((l) => l.text),
       timedLines: timed,
     };

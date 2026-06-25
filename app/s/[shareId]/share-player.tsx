@@ -55,6 +55,11 @@ function formatTime(s: number): string {
    is owned by SharePlayer (driven by the orb dial) and flows in here. */
 function usePlayerController(share: ShareData, voiceVol: number) {
   const isSubliminal = share.type === "subliminal";
+  const isSleep = share.type === "sleep";
+  // Subliminal + sleep share the voice-over-bed structure (primary = voice,
+  // optional ambient bed underneath). Only subliminal LOOPS — sleep plays the
+  // voice once, whole-track.
+  const isImmersive = isSubliminal || isSleep;
   const primaryRef = useRef<HTMLAudioElement>(null); // moment track OR voice loop
   const bedRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -66,17 +71,17 @@ function usePlayerController(share: ShareData, voiceVol: number) {
 
   const loopWindow = isSubliminal ? share.loopSeconds ?? 24 : 0;
   const captionTime = loopWindow > 0 ? currentTime % loopWindow : currentTime;
-  const hasBed = isSubliminal && !!share.bedUrl;
+  const hasBed = isImmersive && !!share.bedUrl;
 
   useEffect(() => {
-    if (primaryRef.current && isSubliminal) primaryRef.current.volume = voiceVol;
-  }, [voiceVol, isSubliminal]);
+    if (primaryRef.current && isImmersive) primaryRef.current.volume = voiceVol;
+  }, [voiceVol, isImmersive]);
 
   const toggle = useCallback(() => {
     const a = primaryRef.current;
     if (!a) return;
     if (a.paused) {
-      if (isSubliminal) a.volume = voiceVol;
+      if (isImmersive) a.volume = voiceVol;
       setFailed(false);
       setIsPlaying(true);
       // play() rejects on a missing/forbidden source (403, CORS, bad codec).
@@ -95,7 +100,7 @@ function usePlayerController(share: ShareData, voiceVol: number) {
       if (bedRef.current) bedRef.current.pause();
       setIsPlaying(false);
     }
-  }, [isSubliminal, voiceVol, hasBed]);
+  }, [isImmersive, voiceVol, hasBed]);
 
   const seekTo = useCallback((s: number) => {
     const a = primaryRef.current;
@@ -124,12 +129,19 @@ function usePlayerController(share: ShareData, voiceVol: number) {
     <>
       <audio
         ref={primaryRef}
-        src={isSubliminal ? share.voiceUrl : share.audioUrl}
+        src={isImmersive ? share.voiceUrl : share.audioUrl}
         loop={isSubliminal}
-        preload={isSubliminal ? "auto" : "metadata"}
+        preload={isImmersive ? "auto" : "metadata"}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        onEnded={isSubliminal ? undefined : () => setIsPlaying(false)}
+        onEnded={
+          isSubliminal
+            ? undefined
+            : () => {
+                setIsPlaying(false);
+                if (bedRef.current) bedRef.current.pause();
+              }
+        }
         onError={() => {
           setIsPlaying(false);
           setFailed(true);
@@ -141,6 +153,8 @@ function usePlayerController(share: ShareData, voiceVol: number) {
 
   return {
     isSubliminal,
+    isSleep,
+    isImmersive,
     isPlaying,
     failed,
     currentTime,
@@ -217,7 +231,9 @@ const IconExpand = () => (
 
 export function SharePlayer({ share }: { share: ShareData }) {
   const isSubliminal = share.type === "subliminal";
-  const noun = isSubliminal ? "subliminal" : "visualization";
+  const isSleep = share.type === "sleep";
+  const isImmersive = isSubliminal || isSleep;
+  const noun = isSubliminal ? "subliminal" : isSleep ? "sleep journey" : "visualization";
   const nounPlural = `${noun}s`;
 
   // Voice level (subliminals): owned here so the orb dial and the <audio> in
@@ -268,7 +284,7 @@ export function SharePlayer({ share }: { share: ShareData }) {
           <Orb
             playing={player.isPlaying}
             ring={
-              isSubliminal ? (
+              isImmersive ? (
                 <VoiceVolumeRing
                   orbSize={ORB_SIZE}
                   volume={voiceVol}
@@ -281,7 +297,9 @@ export function SharePlayer({ share }: { share: ShareData }) {
           />
         </div>
 
-        {/* controls (per type) */}
+        {/* controls (per type) — sleep is whole-track, so it uses the scrub
+            transport (not the loop-only subliminal one); its voice+bed mix +
+            dial still come from the immersive controller/orb above. */}
         {isSubliminal ? (
           <SubliminalTransport share={share} player={player} />
         ) : (
@@ -460,7 +478,12 @@ function ReadAlongOverlay({
   open: boolean;
   onClose: () => void;
 }) {
-  const nounPlural = share.type === "subliminal" ? "subliminals" : "visualizations";
+  const nounPlural =
+    share.type === "subliminal"
+      ? "subliminals"
+      : share.type === "sleep"
+        ? "sleep journeys"
+        : "visualizations";
   const scrollRef = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState(0);
   const dragState = useRef({ startY: 0, active: false });
