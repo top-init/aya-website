@@ -94,7 +94,8 @@ function buildPlain(parts: string[]): LyricsLine[] {
 /** Resolve a share into karaoke lines + the time signal that drives them. */
 export function useLyrics(share: ShareData): LyricsLine[] {
   return useMemo(() => {
-    if (share.type === "subliminal") {
+    // Subliminal + sleep both carry timed lines for the read-along karaoke.
+    if (share.type === "subliminal" || share.type === "sleep") {
       if (share.timedLines?.length) return buildFromTimedLines(share.timedLines);
       if (share.lines?.length) return buildPlain(share.lines);
       return [];

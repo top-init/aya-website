@@ -12,7 +12,12 @@ type Params = { params: Promise<{ shareId: string }> };
 export default async function SharePreview({ params }: Params) {
   const { shareId } = await params;
   const share = await getShare(shareId);
-  const noun = share.type === "subliminal" ? "subliminal" : "visualization";
+  const noun =
+    share.type === "subliminal"
+      ? "subliminal"
+      : share.type === "sleep"
+        ? "sleep journey"
+        : "visualization";
 
   // These two strings are produced identically in the page's generateMetadata.
   const title = `${share.creatorName} shared a ${noun} with you on Aya`;

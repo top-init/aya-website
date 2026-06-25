@@ -7,7 +7,12 @@ type Params = { params: Promise<{ shareId: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { shareId } = await params;
   const share = await getShare(shareId);
-  const noun = share.type === "subliminal" ? "subliminal" : "visualization";
+  const noun =
+    share.type === "subliminal"
+      ? "subliminal"
+      : share.type === "sleep"
+        ? "sleep journey"
+        : "visualization";
   const title = `${share.creatorName} shared a ${noun} with you on Aya`;
   const description = `“${share.title}” — listen now on Aya.`;
 
