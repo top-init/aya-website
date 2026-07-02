@@ -12,7 +12,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       ? "subliminal"
       : share.type === "sleep"
         ? "sleep journey"
-        : "visualization";
+        : share.type === "creator"
+          ? "manifestation"
+          : "visualization";
   const title = `${share.creatorName} shared a ${noun} with you on Aya`;
   const description = `“${share.title}” — listen now on Aya.`;
 

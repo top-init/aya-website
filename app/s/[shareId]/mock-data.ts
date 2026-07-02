@@ -7,7 +7,7 @@ export type TimedLine = { index: number; text: string; start: number; end: numbe
 
 export type ShareData = {
   shareId: string;
-  type: "moment" | "subliminal" | "sleep";
+  type: "moment" | "subliminal" | "sleep" | "creator";
   creatorName: string;
   title: string;
   theme?: string;
@@ -35,10 +35,11 @@ export const SHARE_API_BASE =
   process.env.SHARE_API_BASE || "http://127.0.0.1:8080";
 
 function mapApiToShare(api: Record<string, unknown>): ShareData {
-  const type = api.type as "moment" | "subliminal" | "sleep";
-  // Subliminal + sleep share the same voice-over-bed shape; sleep just plays
-  // the voice ONCE whole-track (loopSeconds 0) instead of loop-cycling a window.
-  if (type === "subliminal" || type === "sleep") {
+  const type = api.type as "moment" | "subliminal" | "sleep" | "creator";
+  // Subliminal + sleep + creator share the same voice-over-bed shape. Sleep and
+  // creator play the voice ONCE whole-track (loopSeconds 0); only subliminal
+  // loop-cycles a window. Creator = a shared Community Manifestation track.
+  if (type === "subliminal" || type === "sleep" || type === "creator") {
     const timed = ((api.lines as TimedLine[]) || [])
       .slice()
       .sort((a, b) => a.index - b.index);
@@ -46,12 +47,21 @@ function mapApiToShare(api: Record<string, unknown>): ShareData {
       shareId: String(api.share_id),
       type,
       creatorName: (api.creator_name as string) || "Someone",
-      title: (api.name as string) || (type === "sleep" ? "A sleep journey" : "A subliminal"),
+      title:
+        (api.name as string) ||
+        (type === "sleep"
+          ? "A sleep journey"
+          : type === "creator"
+            ? "A manifestation"
+            : "A subliminal"),
       theme: api.theme as string | undefined,
       voiceUrl: api.audio_url as string | undefined,
       bedUrl: api.bed_url as string | undefined,
       bedName: (api.bed_name as string) || "Ambient",
-      loopSeconds: type === "sleep" ? 0 : (api.loop_seconds as number) || 30,
+      loopSeconds: type === "sleep" || type === "creator" ? 0 : (api.loop_seconds as number) || 30,
+      // Creator voice is a foreground affirmation → full volume. Subliminal/sleep
+      // fall back to the player's buried default when unset.
+      voiceVolume: type === "creator" ? ((api.voice_volume as number) ?? 1) : (api.voice_volume as number | undefined),
       lines: timed.map((l) => l.text),
       timedLines: timed,
     };
