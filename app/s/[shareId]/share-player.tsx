@@ -56,10 +56,11 @@ function formatTime(s: number): string {
 function usePlayerController(share: ShareData, voiceVol: number) {
   const isSubliminal = share.type === "subliminal";
   const isSleep = share.type === "sleep";
-  // Subliminal + sleep share the voice-over-bed structure (primary = voice,
-  // optional ambient bed underneath). Only subliminal LOOPS — sleep plays the
-  // voice once, whole-track.
-  const isImmersive = isSubliminal || isSleep;
+  const isCreator = share.type === "creator";
+  // Subliminal + sleep + creator share the voice-over-bed structure (primary =
+  // voice, optional ambient bed underneath). Only subliminal LOOPS — sleep and
+  // creator play the voice once, whole-track.
+  const isImmersive = isSubliminal || isSleep || isCreator;
   const primaryRef = useRef<HTMLAudioElement>(null); // moment track OR voice loop
   const bedRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -232,8 +233,15 @@ const IconExpand = () => (
 export function SharePlayer({ share }: { share: ShareData }) {
   const isSubliminal = share.type === "subliminal";
   const isSleep = share.type === "sleep";
-  const isImmersive = isSubliminal || isSleep;
-  const noun = isSubliminal ? "subliminal" : isSleep ? "sleep journey" : "visualization";
+  const isCreator = share.type === "creator";
+  const isImmersive = isSubliminal || isSleep || isCreator;
+  const noun = isSubliminal
+    ? "subliminal"
+    : isSleep
+      ? "sleep journey"
+      : isCreator
+        ? "manifestation"
+        : "visualization";
   const nounPlural = `${noun}s`;
 
   // Voice level (subliminals): owned here so the orb dial and the <audio> in
@@ -483,7 +491,9 @@ function ReadAlongOverlay({
       ? "subliminals"
       : share.type === "sleep"
         ? "sleep journeys"
-        : "visualizations";
+        : share.type === "creator"
+          ? "manifestations"
+          : "visualizations";
   const scrollRef = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState(0);
   const dragState = useRef({ startY: 0, active: false });

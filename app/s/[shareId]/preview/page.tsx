@@ -17,7 +17,9 @@ export default async function SharePreview({ params }: Params) {
       ? "subliminal"
       : share.type === "sleep"
         ? "sleep journey"
-        : "visualization";
+        : share.type === "creator"
+          ? "manifestation"
+          : "visualization";
 
   // These two strings are produced identically in the page's generateMetadata.
   const title = `${share.creatorName} shared a ${noun} with you on Aya`;
