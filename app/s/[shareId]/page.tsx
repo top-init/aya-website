@@ -15,7 +15,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       robots: { index: false, follow: false },
     };
   }
-  const noun = share.type === "subliminal" ? "subliminal" : "visualization";
+  const noun =
+    share.type === "subliminal"
+      ? "subliminal"
+      : share.type === "sleep"
+        ? "sleep journey"
+        : share.type === "creator"
+          ? "manifestation"
+          : "visualization";
   const title = `${share.creatorName} shared a ${noun} with you on Aya`;
   const description = `“${share.title}” — listen now on Aya.`;
 

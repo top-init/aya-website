@@ -32,7 +32,14 @@ export default async function Image({ params }: Params) {
       creatorName: "A friend",
       title: "A manifestation on Aya",
     };
-    const noun = share.type === "subliminal" ? "subliminal" : "visualization";
+    const noun =
+      share.type === "subliminal"
+        ? "subliminal"
+        : share.type === "sleep"
+          ? "sleep journey"
+          : share.type === "creator"
+            ? "manifestation"
+            : "visualization";
 
     const [semibold, medium, italic] = await Promise.all([
       loadFont("Cormorant-SemiBold.ttf"),
