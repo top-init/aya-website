@@ -22,7 +22,20 @@ export function AppDeeplinkRedirect({
 }) {
   useEffect(() => {
     const { search, hash } = window.location;
-    const deepLink = `aya://${path}${search}${hash}`;
+    // The shipped iOS binary has kept this legacy scheme since launch (the
+    // bundle id is legacy too). Universal Links remain canonical; this is only
+    // the fallback for browsers that ignore domain association.
+    // Expo Router expects a root-relative route after the scheme. Keeping the
+    // third slash avoids treating the first path segment as a URL host.
+    // Encode each path segment: `path` can carry an attacker-controlled dynamic
+    // route param (e.g. r/<sharedId>) that Next percent-DECODES on the server,
+    // so re-encode here before it lands in a URL (defense in depth).
+    const normalizedPath = path
+      .replace(/^\/+/, "")
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/");
+    const deepLink = `periodtrackerapp:///${normalizedPath}${search}${hash}`;
 
     window.location.replace(deepLink);
 
@@ -35,9 +48,29 @@ export function AppDeeplinkRedirect({
         : /iphone|ipad|ipod/i.test(ua)
           ? APP_STORE_URL
           : null;
-      status.innerHTML = storeUrl
-        ? `Aya didn't open. <a href="${deepLink}" class="text-[var(--color-brand)] underline">Try again</a> or <a href="${storeUrl}" class="text-[var(--color-brand)] underline">install Aya</a>.`
-        : "Open this link on the device where Aya is installed.";
+      // Build the prompt as DOM nodes (never innerHTML): `deepLink` contains the
+      // route param, and string-interpolating it into HTML is a delivered XSS
+      // on this origin. textContent + setAttribute keep it inert.
+      if (!storeUrl) {
+        status.textContent =
+          "Open this link on the device where Aya is installed.";
+        return;
+      }
+      const link = (href: string, label: string) => {
+        const a = document.createElement("a");
+        a.setAttribute("href", href);
+        a.className = "text-[var(--color-brand)] underline";
+        a.textContent = label;
+        return a;
+      };
+      status.textContent = "";
+      status.append(
+        "Aya didn't open. ",
+        link(deepLink, "Try again"),
+        " or ",
+        link(storeUrl, "install Aya"),
+        ".",
+      );
     }, 1800);
 
     return () => window.clearTimeout(fallback);

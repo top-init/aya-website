@@ -68,20 +68,25 @@ function mapApiToShare(api: Record<string, unknown>): ShareData {
   };
 }
 
-/** Resolve a share id to real data from the backend, with a demo fallback. */
-export async function getShare(shareId: string): Promise<ShareData> {
-  if (!shareId.startsWith("demo-")) {
-    try {
-      const res = await fetch(
-        `${SHARE_API_BASE}/public/shares/${encodeURIComponent(shareId)}`,
-        { cache: "no-store" }
-      );
-      if (res.ok) return mapApiToShare(await res.json());
-    } catch {
-      // fall through to demo fixture
-    }
+/**
+ * Resolve a share id to real data from the backend. Returns null when a real
+ * (non-demo) share can't be resolved — an expired/deleted/unknown code, or a
+ * backend/misconfig failure — so callers render a genuine not-found state
+ * instead of unfurling the "demo-*" fixture as if it were someone's real share.
+ * Only literal `demo-*` ids use the bundled fixtures.
+ */
+export async function getShare(shareId: string): Promise<ShareData | null> {
+  if (shareId.startsWith("demo-")) return getMockShare(shareId);
+  try {
+    const res = await fetch(
+      `${SHARE_API_BASE}/public/shares/${encodeURIComponent(shareId)}`,
+      { cache: "no-store" }
+    );
+    if (res.ok) return mapApiToShare(await res.json());
+  } catch {
+    // network/backend failure → treat as not-found (don't serve fake data)
   }
-  return getMockShare(shareId);
+  return null;
 }
 
 // ── Demo fixtures (used for /s/demo-* and as offline fallback) ──────────

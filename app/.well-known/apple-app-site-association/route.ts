@@ -14,7 +14,7 @@ const AASA = {
     details: [
       {
         appID: "ZY7V5JPPDQ.com.litapps.periodtracker",
-        paths: ["/auth/*", "/reactivate"],
+        paths: ["/auth/*", "/reactivate", "/r/*"],
       },
     ],
   },

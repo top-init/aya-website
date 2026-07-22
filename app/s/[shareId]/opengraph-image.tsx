@@ -26,7 +26,12 @@ async function loadFont(file: string) {
 export default async function Image({ params }: Params) {
   try {
     const { shareId } = await params;
-    const share = await getShare(shareId);
+    // Generic card for expired/unknown shares — never unfurl fixture data.
+    const share = (await getShare(shareId)) ?? {
+      type: "moment" as const,
+      creatorName: "A friend",
+      title: "A manifestation on Aya",
+    };
     const noun = share.type === "subliminal" ? "subliminal" : "visualization";
 
     const [semibold, medium, italic] = await Promise.all([
@@ -190,9 +195,13 @@ export default async function Image({ params }: Params) {
       ],
     });
   } catch (e) {
-    return new Response(
-      "OG_ERROR\n" + (e instanceof Error ? `${e.message}\n${e.stack}` : String(e)),
-      { status: 200, headers: { "content-type": "text/plain" } }
-    );
+    // Log the detail server-side only; never leak stack traces to the public
+    // (and never 200 — crawlers/caches would treat the error blob as a valid
+    // image).
+    console.error("OG image generation failed", e);
+    return new Response("Image unavailable", {
+      status: 500,
+      headers: { "content-type": "text/plain" },
+    });
   }
 }
