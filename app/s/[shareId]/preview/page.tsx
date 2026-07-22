@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getShare } from "../mock-data";
 
 // Dev/visualization page: shows EXACTLY what unfurls when this share link is
@@ -12,6 +13,7 @@ type Params = { params: Promise<{ shareId: string }> };
 export default async function SharePreview({ params }: Params) {
   const { shareId } = await params;
   const share = await getShare(shareId);
+  if (!share) notFound();
   const noun =
     share.type === "subliminal"
       ? "subliminal"
