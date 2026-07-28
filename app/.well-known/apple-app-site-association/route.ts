@@ -6,7 +6,10 @@
 //
 // appID = <AppleTeamID>.<bundleId>. iOS bundle is com.litapps.periodtracker
 // (pre-rebrand id, kept to preserve installs); Team ID ZY7V5JPPDQ.
-// paths claimed: the magic-link verify deep link and the reactivate link.
+// paths claimed: the magic-link verify deep link, the reactivate link, shared
+// rooms, and /e/* (the lifecycle-email landings). Until a build ships that
+// verifies /e/*, those links still work — the page bounces through the aya://
+// scheme — they just flash the browser first.
 
 const AASA = {
   applinks: {
@@ -14,7 +17,7 @@ const AASA = {
     details: [
       {
         appID: "ZY7V5JPPDQ.com.litapps.periodtracker",
-        paths: ["/auth/*", "/reactivate", "/r/*"],
+        paths: ["/auth/*", "/reactivate", "/r/*", "/e/*"],
       },
     ],
   },
