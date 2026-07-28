@@ -11,11 +11,17 @@ import { AppDeeplinkRedirect } from "@/components/app-deeplink-redirect";
 
 // Allowlist, not a passthrough: `dest` becomes an aya:// path, so an open
 // parameter would let any link shape a deep link. Unknown value → 404.
-const DESTINATIONS: Record<string, { title: string; line: string }> = {
-  home: { title: "Opening Aya…", line: "One moment." },
-  profile: { title: "Opening Aya…", line: "Taking you to your words." },
-  player: { title: "Opening Aya…", line: "Getting your session ready." },
-  offer: { title: "Opening Aya…", line: "One moment." },
+//
+// `path` is the route INSIDE the app, which is not the same string as the
+// public dest. Home lives at app/(tabs)/index, i.e. the root — `aya://home`
+// matches no route and lands the reader on a blank screen. Anything the app
+// can't route yet points at the root for the same reason; give it a real
+// route here only once one exists.
+const DESTINATIONS: Record<string, { path: string; line: string }> = {
+  home: { path: "", line: "One moment." },
+  profile: { path: "profile", line: "Taking you to your words." },
+  player: { path: "player", line: "Getting your session ready." },
+  offer: { path: "", line: "One moment." },
 };
 
 export const metadata: Metadata = {
@@ -35,7 +41,7 @@ export default async function EmailLandingPage({
   return (
     <div className="mx-auto max-w-md px-5 py-24 text-center">
       <h1 className="t-title2 text-[var(--color-text-primary)] mb-3">
-        {copy.title}
+        Opening Aya…
       </h1>
       <p
         className="t-body text-[var(--color-text-secondary)] mb-8"
@@ -54,7 +60,7 @@ export default async function EmailLandingPage({
           installed.
         </p>
       </noscript>
-      <AppDeeplinkRedirect path={dest} statusElementId="e-status" />
+      <AppDeeplinkRedirect path={copy.path} statusElementId="e-status" />
     </div>
   );
 }
