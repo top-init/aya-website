@@ -39,10 +39,25 @@ const DESTINATIONS: Record<string, { path: string; query?: string; line: string 
 // nothing at all, falls back to monthly — never a broken sheet.
 const OFFER_TARGETS = new Set(["monthly", "yearly"]);
 
-function offerQuery(target: string | string[] | undefined): string {
-  const t = Array.isArray(target) ? target[0] : target;
+// A campaign can name the exact product to sell, so its price is a Qonversion
+// change rather than an app release. Shape-checked only — the app resolves the
+// id against the live catalog and falls back to the plan default if it isn't a
+// real product, so this just keeps junk out of the deep link.
+const PRODUCT_ID = /^manifest_[a-z0-9_]{1,64}$/;
+
+function first(v: string | string[] | undefined): string | undefined {
+  return Array.isArray(v) ? v[0] : v;
+}
+
+function offerQuery(
+  target: string | string[] | undefined,
+  product: string | string[] | undefined,
+): string {
+  const t = first(target);
   const safe = t && OFFER_TARGETS.has(t) ? t : "monthly";
-  return `source=email&target=${safe}`;
+  const p = first(product);
+  const productParam = p && PRODUCT_ID.test(p) ? `&product=${p}` : "";
+  return `source=email&target=${safe}${productParam}`;
 }
 
 export const metadata: Metadata = {
@@ -55,14 +70,17 @@ export default async function EmailLandingPage({
   searchParams,
 }: {
   params: Promise<{ dest: string }>;
-  searchParams: Promise<{ target?: string | string[] }>;
+  searchParams: Promise<{
+    target?: string | string[];
+    product?: string | string[];
+  }>;
 }) {
   const { dest } = await params;
   const copy = DESTINATIONS[dest];
   if (!copy) notFound();
 
-  const { target } = await searchParams;
-  const query = dest === "offer" ? offerQuery(target) : copy.query;
+  const { target, product } = await searchParams;
+  const query = dest === "offer" ? offerQuery(target, product) : copy.query;
 
   return (
     <div className="mx-auto max-w-md px-5 py-24 text-center">
