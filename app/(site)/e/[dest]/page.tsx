@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AppDeeplinkRedirect } from "@/components/app-deeplink-redirect";
+import { SHARE_API_BASE } from "@/app/s/[shareId]/mock-data";
 
 // Landing for lifecycle email buttons. The email links here instead of straight
 // to a store listing, so a reader who still has Aya lands IN the app rather
@@ -60,6 +61,32 @@ function offerQuery(
   return `source=email&target=${safe}${productParam}`;
 }
 
+// The lifecycle emails stamp who this went to and which message it was. Only
+// the landing page sees the tap: counting clicks in Resend would mean routing
+// every link through a tracking subdomain, and we would rather keep the links
+// on fromaya.com. Reported server-side, so it lands even if she never confirms
+// the "open in Aya?" prompt.
+const ID = /^[A-Za-z0-9_-]{1,64}$/;
+
+async function reportClick(
+  u: string | undefined,
+  j: string | undefined,
+  s: string | undefined,
+  dest: string,
+) {
+  if (!u || !ID.test(u)) return;
+  try {
+    await fetch(`${SHARE_API_BASE}/e/clicked`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ u, j, s, dest }),
+      // Analytics must never delay or break the redirect she is waiting on.
+      signal: AbortSignal.timeout(2000),
+      cache: "no-store",
+    });
+  } catch {}
+}
+
 export const metadata: Metadata = {
   title: "Opening Aya",
   robots: { index: false, follow: false },
@@ -73,14 +100,21 @@ export default async function EmailLandingPage({
   searchParams: Promise<{
     target?: string | string[];
     product?: string | string[];
+    u?: string | string[];
+    j?: string | string[];
+    s?: string | string[];
   }>;
 }) {
   const { dest } = await params;
   const copy = DESTINATIONS[dest];
   if (!copy) notFound();
 
-  const { target, product } = await searchParams;
+  const { target, product, u, j, s } = await searchParams;
   const query = dest === "offer" ? offerQuery(target, product) : copy.query;
+
+  // Not awaited on the render path — the page has one job, which is to get her
+  // into the app.
+  await reportClick(first(u), first(j), first(s), dest);
 
   return (
     <div className="mx-auto max-w-md px-5 py-24 text-center">
