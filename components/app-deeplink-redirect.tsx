@@ -15,9 +15,11 @@ const PLAY_STORE_URL =
 // association).
 export function AppDeeplinkRedirect({
   path,
+  query,
   statusElementId,
 }: {
   path: string; // e.g. "auth/verify" or "reactivate"
+  query?: string; // e.g. "source=email&target=monthly" — caller literals only
   statusElementId: string;
 }) {
   useEffect(() => {
@@ -35,7 +37,12 @@ export function AppDeeplinkRedirect({
       .split("/")
       .map(encodeURIComponent)
       .join("/");
-    const deepLink = `periodtrackerapp:///${normalizedPath}${search}${hash}`;
+    // `query` is ours (a caller literal, never user input), so it is NOT
+    // encoded like the path segments are — it has to reach the app as real
+    // ?k=v pairs. Anything arriving in the address bar still appends after it.
+    const ownQuery = query ? `?${query}` : "";
+    const incoming = ownQuery && search ? search.replace(/^\?/, "&") : search;
+    const deepLink = `periodtrackerapp:///${normalizedPath}${ownQuery}${incoming}${hash}`;
 
     window.location.replace(deepLink);
 
@@ -74,7 +81,7 @@ export function AppDeeplinkRedirect({
     }, 1800);
 
     return () => window.clearTimeout(fallback);
-  }, [path, statusElementId]);
+  }, [path, query, statusElementId]);
 
   return null;
 }
