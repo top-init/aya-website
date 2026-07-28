@@ -29,10 +29,21 @@ const DESTINATIONS: Record<string, { path: string; query?: string; line: string 
   // Switching which plan the offer sells = change `target` here.
   offer: {
     path: "upgrade-monthly",
-    query: "source=email&target=monthly",
     line: "One moment.",
   },
 };
+
+// Which plan the offer sheet sells. The sending journey names it in the link
+// (?target=yearly for someone who lapsed off monthly), so it follows the plan
+// the reader actually had instead of one hardcoded answer. Anything else, or
+// nothing at all, falls back to monthly — never a broken sheet.
+const OFFER_TARGETS = new Set(["monthly", "yearly"]);
+
+function offerQuery(target: string | string[] | undefined): string {
+  const t = Array.isArray(target) ? target[0] : target;
+  const safe = t && OFFER_TARGETS.has(t) ? t : "monthly";
+  return `source=email&target=${safe}`;
+}
 
 export const metadata: Metadata = {
   title: "Opening Aya",
@@ -41,12 +52,17 @@ export const metadata: Metadata = {
 
 export default async function EmailLandingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ dest: string }>;
+  searchParams: Promise<{ target?: string | string[] }>;
 }) {
   const { dest } = await params;
   const copy = DESTINATIONS[dest];
   if (!copy) notFound();
+
+  const { target } = await searchParams;
+  const query = dest === "offer" ? offerQuery(target) : copy.query;
 
   return (
     <div className="mx-auto max-w-md px-5 py-24 text-center">
@@ -72,7 +88,7 @@ export default async function EmailLandingPage({
       </noscript>
       <AppDeeplinkRedirect
         path={copy.path}
-        query={copy.query}
+        query={query}
         statusElementId="e-status"
       />
     </div>
