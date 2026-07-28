@@ -69,17 +69,17 @@ function offerQuery(
 const ID = /^[A-Za-z0-9_-]{1,64}$/;
 
 async function reportClick(
-  u: string | undefined,
-  j: string | undefined,
-  s: string | undefined,
+  uid: string | undefined,
+  journey: string | undefined,
+  step: string | undefined,
   dest: string,
 ) {
-  if (!u || !ID.test(u)) return;
+  if (!uid || !ID.test(uid)) return;
   try {
     await fetch(`${SHARE_API_BASE}/e/clicked`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ u, j, s, dest }),
+      body: JSON.stringify({ uid, journey, step, dest }),
       // Analytics must never delay or break the redirect she is waiting on.
       signal: AbortSignal.timeout(2000),
       cache: "no-store",
@@ -100,21 +100,21 @@ export default async function EmailLandingPage({
   searchParams: Promise<{
     target?: string | string[];
     product?: string | string[];
-    u?: string | string[];
-    j?: string | string[];
-    s?: string | string[];
+    uid?: string | string[];
+    journey?: string | string[];
+    step?: string | string[];
   }>;
 }) {
   const { dest } = await params;
   const copy = DESTINATIONS[dest];
   if (!copy) notFound();
 
-  const { target, product, u, j, s } = await searchParams;
+  const { target, product, uid, journey, step } = await searchParams;
   const query = dest === "offer" ? offerQuery(target, product) : copy.query;
 
   // Not awaited on the render path — the page has one job, which is to get her
   // into the app.
-  await reportClick(first(u), first(j), first(s), dest);
+  await reportClick(first(uid), first(journey), first(step), dest);
 
   return (
     <div className="mx-auto max-w-md px-5 py-24 text-center">
