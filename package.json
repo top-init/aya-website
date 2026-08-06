@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:onboarding-flow && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync:onboarding-flow": "node scripts/sync-onboarding-flow.mjs",
+    "check:onboarding-flow": "node scripts/sync-onboarding-flow.mjs --check"
   },
   "dependencies": {
+    "i18next": "^26.0.4",
     "next": "^16.2.6",
     "react": "19.0.0",
     "react-dom": "19.0.0"

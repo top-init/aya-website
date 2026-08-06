@@ -32,6 +32,10 @@ const DESTINATIONS: Record<string, { path: string; query?: string; line: string 
     path: "upgrade-monthly",
     line: "One moment.",
   },
+  // web2app: she paid on the web and this link is how that purchase reaches the
+  // app. The token rides through as a query param (see claimQuery) — without it
+  // the screen has nothing to redeem, so this dest is useless bare.
+  claim: { path: "claim", line: "Unlocking everything you bought." },
 };
 
 // Which plan the offer sheet sells. The sending journey names it in the link
@@ -59,6 +63,17 @@ function offerQuery(
   const p = first(product);
   const productParam = p && PRODUCT_ID.test(p) ? `&product=${p}` : "";
   return `source=email&target=${safe}${productParam}`;
+}
+
+// The claim token is opaque and single-use, and the app is the only thing that
+// can redeem it. Shape-checked rather than trusted: this value becomes part of
+// a deep link, so anything outside the token alphabet is dropped instead of
+// being handed to the app.
+const CLAIM_TOKEN = /^[A-Za-z0-9_-]{20,128}$/;
+
+function claimQuery(token: string | string[] | undefined): string {
+  const t = first(token);
+  return t && CLAIM_TOKEN.test(t) ? `token=${t}` : "";
 }
 
 // The lifecycle emails stamp who this went to and which message it was. Only
@@ -103,14 +118,20 @@ export default async function EmailLandingPage({
     uid?: string | string[];
     journey?: string | string[];
     step?: string | string[];
+    token?: string | string[];
   }>;
 }) {
   const { dest } = await params;
   const copy = DESTINATIONS[dest];
   if (!copy) notFound();
 
-  const { target, product, uid, journey, step } = await searchParams;
-  const query = dest === "offer" ? offerQuery(target, product) : copy.query;
+  const { target, product, uid, journey, step, token } = await searchParams;
+  const query =
+    dest === "offer"
+      ? offerQuery(target, product)
+      : dest === "claim"
+        ? claimQuery(token)
+        : copy.query;
 
   // Not awaited on the render path — the page has one job, which is to get her
   // into the app.
