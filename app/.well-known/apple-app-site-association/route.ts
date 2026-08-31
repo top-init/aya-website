@@ -14,6 +14,15 @@
 // /s/*: do NOT deploy this claim before the app release containing
 // app/s/[code] ships — older builds have no /s/ route, so a claimed link
 // would open the app to an unmatched-route screen instead of the web player.
+//
+// /playlist/*: added 2026-08-31, closing a gap that had been open since
+// shared playlists moved from /r/<code> to /playlist/<code>. The Android half
+// has claimed fromaya.com/playlist/ this whole time (app.config.js
+// intentFilters, whose own comment says "the AASA file on the marketing site
+// must claim /playlist/* for the iOS half") — it never did. So an iOS user
+// tapping a friend's playlist link fell through to this site, which has no
+// /playlist route, and got a 404. app/playlist/[slug].tsx shipped in v1.5.x,
+// so the /s/* caveat above is already satisfied for this path.
 
 const AASA = {
   applinks: {
@@ -21,7 +30,7 @@ const AASA = {
     details: [
       {
         appID: "ZY7V5JPPDQ.com.litapps.periodtracker",
-        paths: ["/auth/*", "/reactivate", "/r/*", "/e/*", "/s/*"],
+        paths: ["/auth/*", "/reactivate", "/r/*", "/e/*", "/s/*", "/playlist/*"],
       },
     ],
   },
