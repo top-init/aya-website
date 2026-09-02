@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "May 19, 2026";
-const EFFECTIVE_DATE = "May 19, 2026";
+const LAST_UPDATED = "September 2, 2026";
+const EFFECTIVE_DATE = "September 2, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -105,6 +105,12 @@ export default function PrivacyPage() {
           crash reports and performance traces.
         </li>
         <li>A device-generated identifier used by our analytics provider.</li>
+        <li>
+          Your device&rsquo;s <strong>advertising identifier</strong> (the IDFA
+          on iOS, the Advertising ID on Android) and IP address, used only to
+          measure our own advertising as described in Section 5.2. On iOS this
+          is shared only if you allow the tracking prompt.
+        </li>
       </ul>
 
       <h3>2.5 Subscription information</h3>
@@ -188,7 +194,9 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
-      <h2>5. Third-party services &amp; subprocessors</h2>
+      <h2>5. Third-party services, subprocessors &amp; advertising partners</h2>
+
+      <h3>5.1 Processors acting on our behalf</h3>
       <p>
         Aya shares the minimum necessary information with these providers,
         each acting as a processor or subprocessor on our behalf:
@@ -225,13 +233,54 @@ export default function PrivacyPage() {
           purchase processing, push notifications, app distribution.
         </li>
         <li>
+          <strong>Stripe (Stripe, Inc.)</strong> — card payments where you
+          subscribe on the web rather than through an app store. We do not see
+          or store your card details.
+        </li>
+        <li>
           <strong>Vercel</strong> — hosting of <code>fromaya.com</code>.
         </li>
       </ul>
       <p>
         <strong>Subprocessors:</strong> Firebase (Google LLC), Resend (Resend,
         Inc.), Qonversion (Qonversion Inc.), ElevenLabs (ElevenLabs Inc.),
-        OpenAI (OpenAI, L.L.C.).
+        OpenAI (OpenAI, L.L.C.), Stripe (Stripe, Inc.).
+      </p>
+
+      <h3>5.2 Advertising partners (measuring our own ads)</h3>
+      <p>
+        We advertise Aya on other platforms. To learn which of those ads
+        actually bring people to Aya, the app sends install, app-open and
+        purchase events to <strong>Meta Platforms, Inc.</strong> (Facebook and
+        Instagram) and <strong>TikTok Technology Limited</strong>. Those events
+        can include your device&rsquo;s advertising identifier, IP address and
+        the value of a purchase, so the platform can match your install back to
+        an ad you saw.
+      </p>
+      <p>
+        Unlike the providers in Section 5.1, Meta and TikTok are{" "}
+        <strong>not</strong> acting only on our behalf — each also uses this
+        data as an independent controller under its own policy (
+        <a href="https://www.facebook.com/privacy/policy">Meta</a>,{" "}
+        <a href="https://www.tiktok.com/legal/page/eea/privacy-policy/en">
+          TikTok
+        </a>
+        ). We do not send them your email, your name, or anything you write,
+        record or generate inside Aya.
+      </p>
+      <p>
+        This measures our own advertising. It does not place ads inside Aya and
+        it changes nothing about what you see in the app.
+      </p>
+      <p>
+        <strong>Your choices.</strong> On iOS, nothing is shared unless you
+        allow the App Tracking Transparency prompt; you can change your answer
+        any time under <em>Settings → Privacy &amp; Security → Tracking</em>.
+        On Android there is no equivalent prompt — you can delete your
+        Advertising ID under <em>Settings → Privacy → Ads</em>, which stops it
+        being shared, or reset it to break the link to past activity. You can
+        also email us to object, and we will stop this use for your account.
+        Declining changes nothing about your access to Aya.
       </p>
 
       <h2>6. AI-generated content</h2>
@@ -248,8 +297,13 @@ export default function PrivacyPage() {
       <p>We do not sell your personal information. We share data only when:</p>
       <ul>
         <li>
-          A processor listed in Section 5 needs it to deliver part of the
+          A processor listed in Section 5.1 needs it to deliver part of the
           Service.
+        </li>
+        <li>
+          An advertising partner named in Section 5.2 receives the limited
+          measurement data described there, subject to the choices in that
+          section.
         </li>
         <li>
           You explicitly choose to share content (for example, exporting a
@@ -321,10 +375,21 @@ export default function PrivacyPage() {
       <p>
         California residents have the right under the CCPA / CPRA to know what
         personal information we collect, to delete it, to correct it, and to
-        opt out of any &ldquo;sale&rdquo; or &ldquo;sharing.&rdquo; We do not
-        sell personal information and we do not share it for cross-context
-        behavioural advertising. To exercise your rights, email{" "}
-        <a href="mailto:info@litappslab.com">info@litappslab.com</a>.
+        opt out of any &ldquo;sale&rdquo; or &ldquo;sharing.&rdquo;
+      </p>
+      <p>
+        <strong>We do not sell personal information.</strong> We do
+        &ldquo;share&rdquo; a limited set of it — your advertising identifier,
+        IP address and purchase events — for cross-context behavioural
+        advertising, as described in Section 5.2. That is the only such
+        sharing we do.
+      </p>
+      <p>
+        To opt out: decline the tracking prompt on iOS, or delete your
+        Advertising ID on Android (both described in Section 5.2), or email{" "}
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a> and we
+        will stop it for your account. To exercise any other right, email the
+        same address.
       </p>
 
       <h2>12. Children</h2>
