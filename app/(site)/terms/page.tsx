@@ -86,12 +86,19 @@ export default function TermsPage() {
       </p>
       <h3>4.2 Billing</h3>
       <p>
-        Subscriptions are billed by <strong>Apple</strong> through the App
-        Store or by <strong>Google</strong> through Google Play, depending on
-        your platform. Payment is charged to your store account at
-        confirmation of purchase and renews automatically for the same period
-        at the then-current price unless cancelled at least 24 hours before
-        the end of the current period.
+        Subscriptions bought inside the app are billed by{" "}
+        <strong>Apple</strong> through the App Store or by{" "}
+        <strong>Google</strong> through Google Play, depending on your
+        platform. Payment is charged to your store account at confirmation of
+        purchase and renews automatically for the same period at the
+        then-current price unless cancelled at least 24 hours before the end of
+        the current period.
+      </p>
+      <p>
+        Subscriptions bought on the web are billed by us through{" "}
+        <strong>Stripe</strong>. Payment is charged to the card you provide and
+        renews automatically for the same period at the then-current price
+        until you cancel. We do not see or store your card details.
       </p>
       <h3>4.3 Trials</h3>
       <p>
@@ -100,17 +107,22 @@ export default function TermsPage() {
       </p>
       <h3>4.4 Managing &amp; cancelling</h3>
       <p>
-        Manage or cancel your subscription in your App Store account (iOS:{" "}
-        <em>Settings → Apple ID → Subscriptions</em>) or Play Store account
-        (Android: <em>Play Store → profile → Payments &amp; subscriptions →
-        Subscriptions</em>). Cancellation takes effect at the end of the
-        current billing period.
+        Manage or cancel a store-billed subscription in your App Store account
+        (iOS: <em>Settings → Apple ID → Subscriptions</em>) or Play Store
+        account (Android: <em>Play Store → profile → Payments &amp;
+        subscriptions → Subscriptions</em>). For a web subscription billed
+        through Stripe, cancel in the app or email{" "}
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a>.
+        Cancellation takes effect at the end of the current billing period.
       </p>
       <h3>4.5 Refunds</h3>
       <p>
-        Refund requests are handled by Apple or Google under their respective
-        policies. We cannot directly issue refunds for store-billed purchases.
-        Where required by law, statutory refund rights still apply.
+        Refund requests for store-billed purchases are handled by Apple or
+        Google under their respective policies; we cannot directly issue those
+        refunds. For web subscriptions billed through Stripe, email{" "}
+        <a href="mailto:info@litappslab.com">info@litappslab.com</a> and we
+        handle the refund ourselves. Where required by law, statutory refund
+        rights still apply.
       </p>
       <h3>4.6 Price changes</h3>
       <p>
