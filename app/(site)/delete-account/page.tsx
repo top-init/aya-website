@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   title: "Delete your account",
   description:
     "Request deletion of your Aya account and all associated data.",
-  alternates: { canonical: "/delete-account" },
+  // The apex now owns this page (aya-websites #7); fromaya.com stays live for
+  // AASA/assetlinks/media, but its copy must not compete with it in the index.
+  alternates: { canonical: "https://ayamethod.com/en/delete-account" },
 };
 
 const SUPPORT_EMAIL = "info@litappslab.com";

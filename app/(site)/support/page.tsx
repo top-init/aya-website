@@ -5,7 +5,9 @@ export const metadata: Metadata = {
   title: "Support",
   description:
     "Get help with Aya — manifestation generation issues, sign-in, subscriptions, restoring purchases, deleting your account.",
-  alternates: { canonical: "/support" },
+  // The apex now owns this page (aya-websites #7); fromaya.com stays live for
+  // AASA/assetlinks/media, but its copy must not compete with it in the index.
+  alternates: { canonical: "https://ayamethod.com/en/support" },
 };
 
 const SUPPORT_EMAIL = "info@litappslab.com";
