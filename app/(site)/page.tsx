@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { StoreBadges } from "@/components/store-badges";
+import type { Metadata } from "next";
+
+// The brand home moved to the apex; this stays a live door, not a rival.
+export const metadata: Metadata = {
+  alternates: { canonical: "https://ayamethod.com/" },
+};
 
 export default function Home() {
   return (

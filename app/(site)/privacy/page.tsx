@@ -4,7 +4,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Privacy policy for Aya — what data we collect, how we use it, and your rights.",
-  alternates: { canonical: "/privacy" },
+  // The apex now owns this page (aya-websites #7); fromaya.com stays live for
+  // AASA/assetlinks/media, but its copy must not compete with it in the index.
+  alternates: { canonical: "https://ayamethod.com/en/privacy" },
 };
 
 const LAST_UPDATED = "September 2, 2026";

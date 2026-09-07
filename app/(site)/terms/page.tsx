@@ -4,7 +4,9 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Terms of Service for Aya — the rules for using the Aya app and website.",
-  alternates: { canonical: "/terms" },
+  // The apex now owns this page (aya-websites #7); fromaya.com stays live for
+  // AASA/assetlinks/media, but its copy must not compete with it in the index.
+  alternates: { canonical: "https://ayamethod.com/en/terms" },
 };
 
 const LAST_UPDATED = "May 19, 2026";
